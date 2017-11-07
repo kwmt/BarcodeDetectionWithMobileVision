@@ -3,10 +3,10 @@ package net.kwmt27.barcodedetectioncodelabo
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 
@@ -18,8 +18,12 @@ class MainActivity : AppCompatActivity() {
 
 
         val button: Button = findViewById(R.id.button)
-        button.setOnClickListener({ v -> Log.d("tag", "onclicklistener") })
+        button.setOnClickListener({ detectBarcode() })
 
+
+    }
+
+    private fun detectBarcode() {
         val textView: TextView = findViewById(R.id.txtContent)
 
 
@@ -36,6 +40,10 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        
+        val frame = Frame.Builder().setBitmap(bitmap).build()
+        val barcodes = detector.detect(frame)
+
+        val thisCode = barcodes.valueAt(0)
+        textView.setText(thisCode.rawValue)
     }
 }
